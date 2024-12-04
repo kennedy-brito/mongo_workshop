@@ -1,6 +1,7 @@
 package com.kennedy.mongo_workshop.servicies;
 
 import com.kennedy.mongo_workshop.domain.User;
+import com.kennedy.mongo_workshop.dto.UserDTO;
 import com.kennedy.mongo_workshop.repository.UserRepository;
 import com.kennedy.mongo_workshop.servicies.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,13 @@ public class UserService {
     public User findById(String id){
         Optional<User> user = repository.findById(id);
         return user.orElseThrow( () -> new ObjectNotFoundException("User not found"));
+    }
+
+    public User insert(User obj){
+        return repository.insert(obj);
+    }
+
+    public User fromDTO(UserDTO objDTO){
+        return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
     }
 }
