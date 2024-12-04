@@ -3,9 +3,11 @@ package com.kennedy.mongo_workshop.resources;
 import com.kennedy.mongo_workshop.domain.User;
 import com.kennedy.mongo_workshop.dto.UserDTO;
 import com.kennedy.mongo_workshop.servicies.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +28,12 @@ public class UserResource {
         List<User> list = userService.findAll();
         List<UserDTO> listDto = list.stream().map(UserDTO::new).toList();
         return ResponseEntity.ok().body(listDto);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> findById(@PathVariable String id){
+        User user = userService.findById(id);
+
+        return ResponseEntity.ok().body(user);
     }
 }
