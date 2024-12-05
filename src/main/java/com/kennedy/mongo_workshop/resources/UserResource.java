@@ -1,5 +1,6 @@
 package com.kennedy.mongo_workshop.resources;
 
+import com.kennedy.mongo_workshop.domain.Post;
 import com.kennedy.mongo_workshop.domain.User;
 import com.kennedy.mongo_workshop.dto.UserDTO;
 import com.kennedy.mongo_workshop.servicies.UserService;
@@ -21,6 +22,7 @@ public class UserResource {
 
     @Autowired
     UserService userService;
+
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
@@ -65,5 +67,11 @@ public class UserResource {
         user = userService.update(user);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<Post>> findPosts(@PathVariable String id){
+        User user = userService.findById(id);
+        return ResponseEntity.ok().body(user.getPosts());
     }
 }
