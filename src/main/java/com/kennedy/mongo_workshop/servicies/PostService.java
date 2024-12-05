@@ -22,4 +22,7 @@ public class PostService {
         return post.orElseThrow( () -> new ObjectNotFoundException("Post not found"));
     }
 
+    public List<Post> findByTitle(String text){
+        return repository.findByTitleContaining(text);
+    }
 }
