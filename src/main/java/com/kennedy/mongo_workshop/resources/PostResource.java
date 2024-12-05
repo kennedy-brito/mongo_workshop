@@ -1,17 +1,14 @@
 package com.kennedy.mongo_workshop.resources;
 
 import com.kennedy.mongo_workshop.domain.Post;
-import com.kennedy.mongo_workshop.domain.User;
-import com.kennedy.mongo_workshop.dto.UserDTO;
 import com.kennedy.mongo_workshop.resources.util.URL;
 import com.kennedy.mongo_workshop.servicies.PostService;
-import com.kennedy.mongo_workshop.servicies.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -35,5 +32,21 @@ public class PostResource {
         List<Post> posts = postService.findByTitle(text);
         return ResponseEntity.ok().body(posts);
     }
+
+
+    @GetMapping(value = "/fullsearch")
+    public ResponseEntity<List<Post>> fullSearch(
+            @RequestParam(value = "text", defaultValue = "") String text,
+            @RequestParam(value = "minDate", defaultValue = "") String minDate,
+            @RequestParam(value = "maxDate", defaultValue = "") String maxDate
+            ){
+        text = URL.decodeParam(text);
+        LocalDate min = URL.convertDate(minDate, LocalDate.of(1980, 1, 1));
+        LocalDate max = URL.convertDate(maxDate, LocalDate.now());
+
+        List<Post> posts = postService.fullSearch(text, min, max);
+        return ResponseEntity.ok().body(posts);
+    }
+
 
 }
