@@ -3,6 +3,7 @@ package com.kennedy.mongo_workshop.resources;
 import com.kennedy.mongo_workshop.domain.Post;
 import com.kennedy.mongo_workshop.domain.User;
 import com.kennedy.mongo_workshop.dto.UserDTO;
+import com.kennedy.mongo_workshop.resources.util.URL;
 import com.kennedy.mongo_workshop.servicies.PostService;
 import com.kennedy.mongo_workshop.servicies.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,14 @@ public class PostResource {
         Post post = postService.findById(id);
 
         return ResponseEntity.ok().body(post);
+    }
+
+    @GetMapping(value = "/titlesearch")
+    public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text){
+        text = URL.decodeParam(text);
+
+        List<Post> posts = postService.findByTitle(text);
+        return ResponseEntity.ok().body(posts);
     }
 
 }
